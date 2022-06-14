@@ -1,0 +1,37 @@
+version: "3"
+services:
+  app:
+    build:
+      args:
+        user: brianalzate97
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: node-app
+    restart: unless-stopped
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+    networks:
+      - nodejs
+
+  db:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_ROOT_PASSWORD: ${PASSWORD}
+      MYSQL_PASSWORD: ${PASSWORD}
+      MYSQL_USER: ${USER}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - nodejs
+    
+
+networks:
+  nodejs:
+    driver: bridge
+volumes:
+  mysql-data:
+       
